@@ -29,19 +29,21 @@ jobs:
           cache: maven
       - name: Build with Maven
         run: mvn clean install
-      - name: Docker login
-        uses: docker/login-action@v3
-        with:
-          image: tuananh1810/demo-cicd
-          tags: v1, latest
-          registry: docker.io
-          dockerfile: Dockerfile
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Build and Push Docker image
-        uses: docker/build-push-action@v6
-        with:
-          push: true
-          tags: v1
-          registry: docker.io
-          dockerfile: Dockerfile
+      - name: List
+        run: ls -la
+#      - name: Docker login
+#        uses: docker/login-action@v3
+#        with:
+#          image: tuananh1810/demo-cicd
+#          tags: v1, latest
+#          registry: docker.io
+#          dockerfile: Dockerfile
+#          username: ${{ secrets.DOCKERHUB_USERNAME }}
+#          password: ${{ secrets.DOCKERHUB_TOKEN }}
+#      - name: Build and Push Docker image
+#        uses: docker/build-push-action@v6
+#        with:
+#          push: true
+#          tags: v1
+#          registry: docker.io
+#          dockerfile: Dockerfile
