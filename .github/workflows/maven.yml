@@ -31,6 +31,8 @@ jobs:
         run: mvn clean install
       - name: List
         run: ls -la
+      - name: List 2
+        run: ls -la target
 #      - name: Docker login
 #        uses: docker/login-action@v3
 #        with:
