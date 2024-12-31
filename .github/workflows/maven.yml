@@ -38,3 +38,10 @@ jobs:
           dockerfile: Dockerfile
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build and Push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          tags: v1
+          registry: docker.io
+          dockerfile: Dockerfile
