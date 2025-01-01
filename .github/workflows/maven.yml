@@ -51,4 +51,4 @@ jobs:
           context: .
           file: Dockerfile
           push: false
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/demo-cicd:${{ steps.docker-meta.outputs.tags }_${{ github.run_number }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/demo-cicd:${{ steps.docker-meta.outputs.tags }}_${{ github.run_number }}
