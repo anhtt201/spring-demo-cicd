@@ -21,6 +21,6 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: '17'
-          distribution: 'corretto'
+          distribution: 'temurin'
           cache: 'maven'
           cache-dependency-path: '**/pom.xml'

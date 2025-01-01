@@ -17,6 +17,14 @@ on:
       - main
 
 jobs:
+  setup-env:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup env
+        uses: ./.github/actions/common/setup-env.yml
+        with:
+          branch: ${{ github.head_ref || github.ref_name }}
+
   build:
     runs-on: ubuntu-latest
     steps:
