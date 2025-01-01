@@ -43,7 +43,7 @@ jobs:
           mvn -B package --file pom.xml
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: project-artifact
           path: target/demo-cicd.jar
