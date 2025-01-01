@@ -30,9 +30,9 @@ jobs:
           distribution: 'corretto'
 
       - name: Build
-        run:
+        run: |
           mvn clean
-          mvn -B package --file pom.xml
+          mvn -Dmaven.test.skip -B package --file pom.xml
 
       - name: Unit test
         run: mvn -B test --file pom.xml
