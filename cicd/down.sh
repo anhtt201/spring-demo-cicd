@@ -1,0 +1,1 @@
+docker compose down spring-demo-cicd
