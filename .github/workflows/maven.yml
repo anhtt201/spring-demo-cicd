@@ -31,7 +31,7 @@ jobs:
           cache: 'maven'
           cache-dependency-path: '**/pom.xml'
 
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
     needs:
       - setup-env
@@ -42,25 +42,27 @@ jobs:
       - name: Build
         run: |
           mvn clean
-          mvn -Dmaven.test.skip -B package --file pom.xml
+          mvn -B package --file pom.xml
 
-  test:
-    runs-on: ubuntu-latest
-    needs:
-      - build
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Unit test
-        run: mvn -B test --file pom.xml
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: project-artifact
+          path: target/demo-cicd.jar
 
   docker:
     runs-on: ubuntu-latest
     needs:
-      - build
-      - test
+      - build-and-test
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: project-artifact
+
       - name: Docker Login
         uses: docker/login-action@v3
         with:
@@ -80,5 +82,5 @@ jobs:
         with:
           context: .
           file: Dockerfile
-          push: false
+          push: true
           tags: ${{ steps.docker-meta.outputs.tags }}_${{ github.run_number }}
