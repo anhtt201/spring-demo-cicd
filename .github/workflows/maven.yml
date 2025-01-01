@@ -43,4 +43,4 @@ jobs:
           context: .
           file: Dockerfile
           push: false
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/demo-cicd:$(date-'%Y-%m-%d%H-%m-%s)_${{ github.run_number }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/demo-cicd:$(date +'%Y-%m-%d %H:%M:%S')_${{ github.run_number }}
