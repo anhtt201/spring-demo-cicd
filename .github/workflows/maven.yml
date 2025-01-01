@@ -17,79 +17,79 @@ on:
       - main
 
 jobs:
-#  setup-env:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Checkout code
-#        uses: actions/checkout@v4
-#
-#      - name: Setup env
-#        uses: actions/setup-java@v4
-#        with:
-#          java-version: '17'
-#          distribution: 'temurin'
-#
-#  build-and-test:
-#    runs-on: ubuntu-latest
-#    needs:
-#      - setup-env
-#    steps:
-#      - name: Checkout code
-#        uses: actions/checkout@v4
-#
-#      - name: Get Repo name
-#        run: |
-#          echo "REPO_NAME=${GITHUB_REPOSITORY#$GITHUB_REPOSITORY_OWNER/}" >> $GITHUB_ENV
-#
-#      - name: Build
-#        run: |
-#          mvn clean
-#          mvn -B package --file pom.xml
-#
-#      - name: Upload Artifact
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: ${{ env.REPO_NAME }}
-#          path: target/${{ env.REPO_NAME }}.jar
-#
-#  docker-push:
-#    runs-on: ubuntu-latest
-#    needs:
-#      - build-and-test
-#    steps:
-#      - name: Checkout code
-#        uses: actions/checkout@v4
-#
-#      - name: Get Repo name
-#        run: |
-#          echo "REPO_NAME=${GITHUB_REPOSITORY#$GITHUB_REPOSITORY_OWNER/}" >> $GITHUB_ENV
-#
-#      - name: Download Artifact
-#        uses: actions/download-artifact@v4
-#        with:
-#          name: ${{ env.REPO_NAME }}
-#
-#      - name: Docker Login
-#        uses: docker/login-action@v3
-#        with:
-#          username: ${{ secrets.DOCKERHUB_USERNAME }}
-#          password: ${{ secrets.DOCKERHUB_TOKEN }}
-#
-#      - name: Docker Meta
-#        id: docker-meta
-#        uses: docker/metadata-action@v4
-#        with:
-#          images: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPO_NAME }}
-#          tags: |
-#            type=raw, value={{date 'YYYYMMDD'}}
-#
-#      - name: Docker Build and Push
-#        uses: docker/build-push-action@v6
-#        with:
-#          context: .
-#          file: ./cicd/Dockerfile
-#          push: true
-#          tags: ${{ steps.docker-meta.outputs.tags }}_${{ github.run_number }}
+  #  setup-env:
+  #    runs-on: ubuntu-latest
+  #    steps:
+  #      - name: Checkout code
+  #        uses: actions/checkout@v4
+  #
+  #      - name: Setup env
+  #        uses: actions/setup-java@v4
+  #        with:
+  #          java-version: '17'
+  #          distribution: 'temurin'
+  #
+  #  build-and-test:
+  #    runs-on: ubuntu-latest
+  #    needs:
+  #      - setup-env
+  #    steps:
+  #      - name: Checkout code
+  #        uses: actions/checkout@v4
+  #
+  #      - name: Get Repo name
+  #        run: |
+  #          echo "REPO_NAME=${GITHUB_REPOSITORY#$GITHUB_REPOSITORY_OWNER/}" >> $GITHUB_ENV
+  #
+  #      - name: Build
+  #        run: |
+  #          mvn clean
+  #          mvn -B package --file pom.xml
+  #
+  #      - name: Upload Artifact
+  #        uses: actions/upload-artifact@v4
+  #        with:
+  #          name: ${{ env.REPO_NAME }}
+  #          path: target/${{ env.REPO_NAME }}.jar
+  #
+  #  docker-push:
+  #    runs-on: ubuntu-latest
+  #    needs:
+  #      - build-and-test
+  #    steps:
+  #      - name: Checkout code
+  #        uses: actions/checkout@v4
+  #
+  #      - name: Get Repo name
+  #        run: |
+  #          echo "REPO_NAME=${GITHUB_REPOSITORY#$GITHUB_REPOSITORY_OWNER/}" >> $GITHUB_ENV
+  #
+  #      - name: Download Artifact
+  #        uses: actions/download-artifact@v4
+  #        with:
+  #          name: ${{ env.REPO_NAME }}
+  #
+  #      - name: Docker Login
+  #        uses: docker/login-action@v3
+  #        with:
+  #          username: ${{ secrets.DOCKERHUB_USERNAME }}
+  #          password: ${{ secrets.DOCKERHUB_TOKEN }}
+  #
+  #      - name: Docker Meta
+  #        id: docker-meta
+  #        uses: docker/metadata-action@v4
+  #        with:
+  #          images: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPO_NAME }}
+  #          tags: |
+  #            type=raw, value={{date 'YYYYMMDD'}}
+  #
+  #      - name: Docker Build and Push
+  #        uses: docker/build-push-action@v6
+  #        with:
+  #          context: .
+  #          file: ./cicd/Dockerfile
+  #          push: true
+  #          tags: ${{ steps.docker-meta.outputs.tags }}_${{ github.run_number }}
 
   docker-run:
     runs-on:
@@ -100,39 +100,27 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Debug Variables
-        run: |
-          Write-Host "GITHUB_REPOSITORY=$env:GITHUB_REPOSITORY"
-          Write-Host "GITHUB_REPOSITORY_OWNER=$env:GITHUB_REPOSITORY_OWNER"
-          echo $env:GITHUB_REPOSITORY
-          echo $env:GITHUB_REPOSITORY_OWNER
-
       - name: Get Repo name
         run: |
-          $REPO_NAME = $env:GITHUB_REPOSITORY -replace "$env:GITHUB_REPOSITORY_OWNER/", ""
-          echo $REPO_NAME
-          Add-Content -Path $env:GITHUB_ENV -Value "REPO_NAME=$REPO_NAME"
+          $env:$REPO_NAME=$env:GITHUB_REPOSITORY -replace "$env:GITHUB_REPOSITORY_OWNER/", ""
 
-#      - name: Get Repo name
-#        run: |
-#          echo "REPO_NAME=${$env:GITHUB_REPOSITORY#$env:GITHUB_REPOSITORY_OWNER/}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-#
-#      - name: Docker Meta
-#        id: docker-meta
-#        uses: docker/metadata-action@v4
-#        with:
-#          images: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPO_NAME }}
-#          tags: |
-#            type=raw, value={{date 'YYYYMMDD'}}
-#
-#      - name: Docker Login
-#        uses: docker/login-action@v3
-#        with:
-#          username: ${{ secrets.DOCKERHUB_USERNAME }}
-#          password: ${{ secrets.DOCKERHUB_TOKEN }}
-#
-#      - name: Docker Run
-#        run: |
-#          $env:IMAGE_TAG=${{ steps.docker-meta.outputs.tags }}_${{ github.run_number }}
+      - name: Docker Meta
+        id: docker-meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ secrets.DOCKERHUB_USERNAME }}/$env:$REPO_NAME
+          tags: |
+            type=raw, value={{date 'YYYYMMDD'}}
+      #
+      #      - name: Docker Login
+      #        uses: docker/login-action@v3
+      #        with:
+      #          username: ${{ secrets.DOCKERHUB_USERNAME }}
+      #          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      #
+      - name: Docker Run
+        run: |
+          $env:IMAGE_TAG=${{ steps.docker-meta.outputs.tags }}_${{ github.run_number }}
+          echo $env:IMAGE_TAG
 #          sh ./cicd/down.sh
 #          sh ./cicd/up.sh
