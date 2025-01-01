@@ -14,6 +14,6 @@ class HealthCheckControllerTest {
 
   @Test
   void testHealthCheck1() {
-    assertEquals("Bad", healthCheckController.healthCheck());
+    assertEquals("Good", healthCheckController.healthCheck());
   }
 }
