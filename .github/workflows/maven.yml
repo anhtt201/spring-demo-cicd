@@ -87,6 +87,6 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: Dockerfile
+          file: ./cicd/Dockerfile
           push: true
           tags: ${{ steps.docker-meta.outputs.tags }}_${{ github.run_number }}
