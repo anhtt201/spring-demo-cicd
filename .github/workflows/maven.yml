@@ -52,7 +52,7 @@ jobs:
           name: ${{ env.REPO_NAME }}
           path: target/${{ env.REPO_NAME }}.jar
 
-  docker:
+  docker-push:
     runs-on: ubuntu-latest
     needs:
       - build-and-test
@@ -83,10 +83,44 @@ jobs:
           tags: |
             type=raw, value={{date 'YYYYMMDD'}}
 
-      - name: Build and Push Docker
+      - name: Docker Build and Push
         uses: docker/build-push-action@v6
         with:
           context: .
           file: ./cicd/Dockerfile
           push: true
           tags: ${{ steps.docker-meta.outputs.tags }}_${{ github.run_number }}
+
+  docker-run:
+    runs-on:
+      - self-hosted
+      - spring_demo_cicd
+    needs:
+      - docker-push
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get Repo name
+        run: |
+          echo "REPO_NAME=${GITHUB_REPOSITORY#$GITHUB_REPOSITORY_OWNER/}" >> $GITHUB_ENV
+
+      - name: Docker Meta
+        id: docker-meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPO_NAME }}
+          tags: |
+            type=raw, value={{date 'YYYYMMDD'}}
+
+      - name: Docker Login
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Docker Run
+        run: |
+          set IMAGE_TAG=${{ steps.docker-meta.outputs.tags }}_${{ github.run_number }}
+          sh ./cicd/down.sh
+          sh ./cicd/up.sh
