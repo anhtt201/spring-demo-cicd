@@ -102,15 +102,13 @@ jobs:
 
       - name: Get Repo name
         run: |
-          $REPO_NAME=$env:GITHUB_REPOSITORY -replace "$env:GITHUB_REPOSITORY_OWNER/", ""
-          $env:$REPO_NAME = $REPO_NAME
-          echo $env:$REPO_NAME
+          echo "REPO_NAME={$env:GITHUB_REPOSITORY -replace "$env:GITHUB_REPOSITORY_OWNER/", ""}" >> $env:GITHUB_ENV
 
       - name: Docker Meta
         id: docker-meta
         uses: docker/metadata-action@v4
         with:
-          images: ${{ secrets.DOCKERHUB_USERNAME }}/$env:$REPO_NAME
+          images: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPO_NAME }}
           tags: |
             type=raw, value={{date 'YYYYMMDD'}}
       #
