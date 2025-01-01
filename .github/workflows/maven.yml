@@ -41,7 +41,7 @@ jobs:
         id: docker-meta
         uses: docker/metadata-action@v4
         with:
-          images: name/app
+          images: ${{ secrets.DOCKERHUB_USERNAME }}/demo-cicd
           tags: |
             type=raw, value={{date 'YYYYMMDD'}}
 
@@ -51,4 +51,4 @@ jobs:
           context: .
           file: Dockerfile
           push: false
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/demo-cicd:${{ steps.docker-meta.outputs.tags }}_${{ github.run_number }}
+          tags: ${{ steps.docker-meta.outputs.tags }}_${{ github.run_number }}
