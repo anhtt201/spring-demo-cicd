@@ -36,3 +36,11 @@ jobs:
 
       - name: Unit test
         run: mvn -B test --file pom.xml
+
+      - name: Build and Push Docker
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile
+          push: false
+          tags: tuananh1810/demo-cicd:v1.0
