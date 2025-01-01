@@ -1,16 +1,12 @@
-version: '3.7'
+name: spring-demo-cicd
 services:
-  spring-demo-cicd:
+  app:
     container_name: spring-demo-cicd
     image: tuananh1810/spring-demo-cicd:${IMAGE_TAG}
     ports:
       - "8080:8080"
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysqldb:3306/${SPRING_DATASOURCE_DATABASE}
-      - SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}
-      - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
     env_file:
-      - ../.env
+      - ../env/.env.app
     depends_on:
       mysqldb:
         condition: service_healthy
@@ -18,14 +14,12 @@ services:
       - mysqldb-network
 
   mysqldb:
+    container_name: mysqldb
     image: mysql:8.0.33
     ports:
       - "3307:3306"
-    environment:
-      - MYSQL_DATABASE=${SPRING_DATASOURCE_DATABASE}
-      - MYSQL_ROOT_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
     env_file:
-      - ../.env
+      - ../env/.env.db
     volumes:
       - mysql-data:/var/lib/mysql
     networks:
