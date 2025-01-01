@@ -16,6 +16,9 @@ on:
     branches:
       - main
 
+env:
+  REPO_NAME: ${{ github.repository | split('/')[-1] }}
+
 jobs:
   setup-env:
     runs-on: ubuntu-latest
@@ -46,7 +49,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: project-artifact
-          path: target/demo-cicd.jar
+          path: target/${{ env.REPO_NAME }}.jar
 
   docker:
     runs-on: ubuntu-latest
@@ -71,7 +74,7 @@ jobs:
         id: docker-meta
         uses: docker/metadata-action@v4
         with:
-          images: ${{ secrets.DOCKERHUB_USERNAME }}/demo-cicd
+          images: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPO_NAME }}
           tags: |
             type=raw, value={{date 'YYYYMMDD'}}
 
