@@ -16,9 +16,6 @@ on:
     branches:
       - main
 
-env:
-  REPO_NAME: ${{ github.repository | split('/')[-1] }}
-
 jobs:
   setup-env:
     runs-on: ubuntu-latest
@@ -40,6 +37,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Get Repo name
+        run: |
+          echo "REPO_NAME=${GITHUB_REPOSITORY#$GITHUB_REPOSITORY_OWNER/}" >> $GITHUB_ENV
+
       - name: Build
         run: |
           mvn clean
@@ -58,6 +59,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Get Repo name
+        run: |
+          echo "REPO_NAME=${GITHUB_REPOSITORY#$GITHUB_REPOSITORY_OWNER/}" >> $GITHUB_ENV
 
       - name: Download Artifact
         uses: actions/download-artifact@v3
