@@ -28,8 +28,6 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-          cache: 'maven'
-          cache-dependency-path: '**/pom.xml'
 
   build-and-test:
     runs-on: ubuntu-latest
