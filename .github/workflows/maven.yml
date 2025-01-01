@@ -102,7 +102,9 @@ jobs:
 
       - name: Get Repo name
         run: |
-          $env:$REPO_NAME=$env:GITHUB_REPOSITORY -replace "$env:GITHUB_REPOSITORY_OWNER/", ""
+          $REPO_NAME=$env:GITHUB_REPOSITORY -replace "$env:GITHUB_REPOSITORY_OWNER/", ""
+          $env:$REPO_NAME = $REPO_NAME
+          echo $env:$REPO_NAME
 
       - name: Docker Meta
         id: docker-meta
@@ -120,7 +122,8 @@ jobs:
       #
       - name: Docker Run
         run: |
-          $env:IMAGE_TAG=${{ steps.docker-meta.outputs.tags }}_${{ github.run_number }}
+          $IMAGE_TAG=${{ steps.docker-meta.outputs.tags }}_${{ github.run_number }}
+          $env:IMAGE_TAG = $IMAGE_TAG
           echo $env:IMAGE_TAG
 #          sh ./cicd/down.sh
 #          sh ./cicd/up.sh
