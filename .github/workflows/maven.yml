@@ -62,7 +62,7 @@ jobs:
 
       - name: Get Repo name
         run: |
-          echo "REPO_NAME=${GITHUB_REPOSITORY#$GITHUB_REPOSITORY_OWNER/}" >> $GITHUB_ENV
+          echo "REPO_NAME=${GITHUB_REPOSITORY#$GITHUB_REPOSITORY_OWNER/}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
       - name: Download Artifact
         uses: actions/download-artifact@v4
@@ -95,6 +95,7 @@ jobs:
     runs-on:
       - self-hosted
       - spring_demo_cicd
+      - Windows
     needs:
       - docker-push
     steps:
@@ -103,7 +104,7 @@ jobs:
 
       - name: Get Repo name
         run: |
-          echo "REPO_NAME=${GITHUB_REPOSITORY#$GITHUB_REPOSITORY_OWNER/}" >> $GITHUB_ENV
+          REPO_NAME = $env:GITHUB_REPOSITORY -replace "$env:GITHUB_REPOSITORY_OWNER/", ""
 
       - name: Docker Meta
         id: docker-meta
