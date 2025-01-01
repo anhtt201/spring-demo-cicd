@@ -108,7 +108,7 @@ jobs:
         id: docker-meta
         uses: docker/metadata-action@v4
         with:
-          images: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPO_NAME }}
+          images: ${{ secrets.DOCKERHUB_USERNAME }}/$env:REPO_NAME
           tags: |
             type=raw, value={{date 'YYYYMMDD'}}
       #
@@ -120,8 +120,8 @@ jobs:
       #
       - name: Docker Run
         run: |
-          $IMAGE_TAG=${{ steps.docker-meta.outputs.tags }}_${{ github.run_number }}
-          $env:IMAGE_TAG = $IMAGE_TAG
+          $env:IMAGE_TAG = ${{ steps.docker-meta.outputs.tags }}_${{ github.run_number }}
           echo $env:IMAGE_TAG
+          echo $env:REPO_NAME
 #          sh ./cicd/down.sh
 #          sh ./cicd/up.sh
