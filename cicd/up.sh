@@ -1,1 +1,1 @@
-docker compose up --build -d spring-demo-cicd
+docker compose --env-file ../.env up --build -d

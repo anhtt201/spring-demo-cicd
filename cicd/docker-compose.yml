@@ -20,10 +20,12 @@ services:
   mysqldb:
     image: mysql:8.0.33
     ports:
-      - "3306:3306"
+      - "3307:3306"
     environment:
       - MYSQL_DATABASE=${SPRING_DATASOURCE_DATABASE}
       - MYSQL_ROOT_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
+    env_file:
+      - ../.env
     volumes:
       - mysql-data:/var/lib/mysql
     networks:
