@@ -1,1 +1,1 @@
-docker compose down app
+docker-compose -f ./cicd/docker-compose.yml down app

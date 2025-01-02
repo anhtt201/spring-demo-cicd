@@ -1,1 +1,1 @@
-docker compose up --build -d app
+docker-compose -f ./cicd/docker-compose.yml up --build -d app
