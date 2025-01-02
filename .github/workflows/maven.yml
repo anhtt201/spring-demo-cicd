@@ -125,6 +125,6 @@ jobs:
       - name: Docker Run
         shell: powershell
         run: |
-          $IMAGE_TAG="${{ steps.docker-meta.outputs.tags }}_${{ github.run_number }}"
-          sh ./cicd/down.sh $IMAGE_TAG
-          sh ./cicd/up.sh $IMAGE_TAG
+          $APP_IMAGE="${{ steps.docker-meta.outputs.tags }}_${{ github.run_number }}"
+          sh ./cicd/down.sh $APP_IMAGE
+          sh ./cicd/up.sh $APP_IMAGE

@@ -1,1 +1,1 @@
-IMAGE_TAG=$1 docker-compose -f ./cicd/docker-compose.yml down app
+APP_IMAGE=$1 docker-compose -f ./cicd/docker-compose.yml down app

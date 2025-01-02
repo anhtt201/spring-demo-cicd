@@ -2,7 +2,7 @@ name: spring-demo-cicd
 services:
   app:
     container_name: spring-demo-cicd
-    image: tuananh1810/${IMAGE_TAG}
+    image: ${APP_IMAGE}
     ports:
       - "8080:8080"
     env_file:
