@@ -96,6 +96,8 @@ jobs:
       - self-hosted
       - spring_demo_cicd
       - Windows
+    needs:
+      - docker-push
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -113,7 +115,7 @@ jobs:
         id: docker-meta
         uses: docker/metadata-action@v4
         with:
-          images: ${{ secrets.DOCKERHUB_USERNAME }}/$env:REPO_NAME
+          images: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPO_NAME }}
           tags: |
             type=raw, value={{date 'YYYYMMDD'}}
 
