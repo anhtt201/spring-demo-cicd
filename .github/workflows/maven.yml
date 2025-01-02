@@ -109,7 +109,8 @@ jobs:
           echo $env:REPO_NAME
 
       - name: Get Repo name 2
-        run: echo $env:REPO_NAME
+        run: |
+          echo $env:REPO_NAME
 
       #      - name: Docker Meta
       #        id: docker-meta
