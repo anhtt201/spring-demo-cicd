@@ -1,1 +1,1 @@
-docker-compose -f ./cicd/docker-compose.yml up --build -d app
+IMAGE_TAG=$1 docker-compose -f ./cicd/docker-compose.yml up --build -d app
