@@ -104,10 +104,6 @@ jobs:
 
       - name: Get Repo name
         run: |
-          echo "REPO_NAME=${GITHUB_REPOSITORY#$GITHUB_REPOSITORY_OWNER/}" >> $GITHUB_ENV
-
-      - name: Get Repo name
-        run: |
           $REPO_NAME = ($env:GITHUB_REPOSITORY -split '/')[1]
           echo "REPO_NAME=$REPO_NAME" >> $env:GITHUB_ENV
 
@@ -127,8 +123,7 @@ jobs:
 
       - name: Docker Run
         run: |
-          $env:IMAGE_TAG = ${{ steps.docker-meta.outputs.tags }}_${{ github.run_number }}
-          echo $env:IMAGE_TAG
-          echo $env:REPO_NAME
-#          sh ./cicd/down.sh
-#          sh ./cicd/up.sh
+          $IMAGE_TAG = ${{ steps.docker-meta.outputs.tags }}_${{ github.run_number }}
+          echo "IMAGE_TAG=IMAGE_TAG" >> $env:GITHUB_ENV
+          sh ./cicd/down.sh
+          sh ./cicd/up.sh
