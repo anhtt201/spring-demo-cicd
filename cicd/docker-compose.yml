@@ -28,7 +28,7 @@ services:
     networks:
       - mysqldb-network
     # Run Flyway migrations
-    entrypoint: [ "flyway", "-baselineOnMigrate=true", "-connectRetries=60", "-locations=filesystem:/flyway/migrations", "migrate" ]
+    entrypoint: [ "flyway", "-baselineOnMigrate=true", "-connectRetries=60", "-locations=filesystem:/flyway/migrations", "-validateMigrationNaming=true", "migrate" ]
     healthcheck:
       test: [ "CMD-SHELL", "flyway info | grep 'No errors'" ]
       retries: 10
