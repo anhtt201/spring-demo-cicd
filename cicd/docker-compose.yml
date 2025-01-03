@@ -10,7 +10,9 @@ services:
     depends_on:
       mysqldb:
         condition: service_healthy
-      flyway:
+      flyway-migrate:
+        condition: service_completed_successfully
+      flyway-undo:
         condition: service_completed_successfully
     networks:
       - mysqldb-network
