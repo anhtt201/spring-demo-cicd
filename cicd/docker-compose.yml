@@ -10,8 +10,30 @@ services:
     depends_on:
       mysqldb:
         condition: service_healthy
+      flyway:
+        condition: service_completed_successfully
     networks:
       - mysqldb-network
+
+  flyway:
+    image: flyway/flyway:latest
+    container_name: flyway
+    depends_on:
+      mysqldb:
+        condition: service_healthy
+    env_file:
+      - ../env/.env.db
+    volumes:
+      - ../src/main/resources/db/migrations:/flyway/migrations
+    networks:
+      - mysqldb-network
+    # Run Flyway migrations
+    entrypoint: [ "flyway", "-baselineOnMigrate=true", "-connectRetries=60", "-locations=filesystem:/flyway/migrations", "migrate" ]
+    healthcheck:
+      test: [ "CMD-SHELL", "flyway info | grep 'No errors'" ]
+      retries: 10
+      interval: 5s
+      timeout: 30s
 
   mysqldb:
     container_name: mysqldb
