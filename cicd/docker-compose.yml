@@ -23,6 +23,8 @@ services:
         condition: service_healthy
     env_file:
       - ../env/.env.db
+    environment:
+      - FLYWAY_UNDO_MIGRATIONS_ENABLED=true
     volumes:
       - ../src/main/resources/db/migrations:/flyway/migrations
     networks:
