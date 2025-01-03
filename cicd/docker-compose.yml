@@ -12,8 +12,6 @@ services:
         condition: service_healthy
       flyway-migrate:
         condition: service_completed_successfully
-      flyway-undo:
-        condition: service_completed_successfully
     networks:
       - mysqldb-network
 
@@ -30,29 +28,7 @@ services:
     networks:
       - mysqldb-network
     # Run Flyway migrations
-    entrypoint: [ "flyway", "-baselineOnMigrate=true", "-connectRetries=60", "-locations=filesystem:/flyway/migrations", "-validateMigrationNaming=true", "migrate" ]
-    healthcheck:
-      test: [ "CMD-SHELL", "flyway info | grep 'No errors'" ]
-      retries: 10
-      interval: 5s
-      timeout: 30s
-
-  flyway-undo:
-    image: redgate/flyway
-    container_name: flyway-undo
-    depends_on:
-      mysqldb:
-        condition: service_healthy
-    env_file:
-      - ../env/.env.db
-    environment:
-      - FLYWAY_UNDO_MIGRATIONS_ENABLED=true
-    volumes:
-      - ../src/main/resources/db/migrations:/flyway/migrations
-    networks:
-      - mysqldb-network
-    # Run Flyway migrations
-    entrypoint: [ "flyway", "-baselineOnMigrate=true", "-connectRetries=60", "-locations=filesystem:/flyway/migrations", "-validateMigrationNaming=true", "undo" ]
+    entrypoint: [ "flyway", "-baselineOnMigrate=true", "-connectRetries=60", "-validateMigrationNaming=true", "migrate" ]
     healthcheck:
       test: [ "CMD-SHELL", "flyway info | grep 'No errors'" ]
       retries: 10
@@ -61,7 +37,7 @@ services:
 
   mysqldb:
     container_name: mysqldb
-    image: mysql:8.0.33
+    image: postgres
     ports:
       - "3307:3306"
     env_file:
@@ -70,11 +46,6 @@ services:
       - mysql-data:/var/lib/mysql
     networks:
       - mysqldb-network
-    healthcheck:
-      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
-      retries: 10
-      interval: 3s
-      timeout: 30s
 volumes:
   mysql-data:
 networks:
