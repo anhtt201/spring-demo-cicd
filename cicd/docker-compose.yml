@@ -16,7 +16,7 @@ services:
       - mysqldb-network
 
   flyway:
-    image: flyway/flyway:latest
+    image: redgate/flyway
     container_name: flyway
     depends_on:
       mysqldb:
