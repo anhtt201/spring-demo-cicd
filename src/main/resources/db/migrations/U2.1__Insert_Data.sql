@@ -1,0 +1,1 @@
+DELETE FROM demo_spring_cicd.country_codes WHERE id=1;
