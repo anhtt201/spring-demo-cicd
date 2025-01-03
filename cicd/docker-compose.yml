@@ -15,9 +15,29 @@ services:
     networks:
       - mysqldb-network
 
-  flyway:
+  flyway-migrate:
     image: redgate/flyway
-    container_name: flyway
+    container_name: flyway-migrate
+    depends_on:
+      mysqldb:
+        condition: service_healthy
+    env_file:
+      - ../env/.env.db
+    volumes:
+      - ../src/main/resources/db/migrations:/flyway/migrations
+    networks:
+      - mysqldb-network
+    # Run Flyway migrations
+    entrypoint: [ "flyway", "-baselineOnMigrate=true", "-connectRetries=60", "-locations=filesystem:/flyway/migrations", "-validateMigrationNaming=true", "migrate" ]
+    healthcheck:
+      test: [ "CMD-SHELL", "flyway info | grep 'No errors'" ]
+      retries: 10
+      interval: 5s
+      timeout: 30s
+
+  flyway-undo:
+    image: redgate/flyway
+    container_name: flyway-undo
     depends_on:
       mysqldb:
         condition: service_healthy
@@ -30,7 +50,7 @@ services:
     networks:
       - mysqldb-network
     # Run Flyway migrations
-    entrypoint: [ "flyway", "-baselineOnMigrate=true", "-connectRetries=60", "-locations=filesystem:/flyway/migrations", "-validateMigrationNaming=true", "migrate" ]
+    entrypoint: [ "flyway", "-baselineOnMigrate=true", "-connectRetries=60", "-locations=filesystem:/flyway/migrations", "-validateMigrationNaming=true", "undo" ]
     healthcheck:
       test: [ "CMD-SHELL", "flyway info | grep 'No errors'" ]
       retries: 10
