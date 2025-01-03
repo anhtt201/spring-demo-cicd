@@ -8,6 +8,8 @@ services:
     env_file:
       - ../env/.env.app
     depends_on:
+      mysqldb:
+        condition: service_healthy
       flyway-migrate:
         condition: service_completed_successfully
     networks:
@@ -16,6 +18,9 @@ services:
   flyway-migrate:
     image: redgate/flyway
     container_name: flyway-migrate
+    depends_on:
+      mysqldb:
+        condition: service_healthy
     env_file:
       - ../env/.env.db
     volumes:
@@ -41,6 +46,13 @@ services:
       - mysql-data:/var/lib/mysql
     networks:
       - mysqldb-network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      # allow startup and scripts to run #
+      start_period: 5s
 volumes:
   mysql-data:
 networks:
