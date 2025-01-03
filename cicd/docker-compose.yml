@@ -39,7 +39,7 @@ services:
     container_name: mysqldb
     image: postgres
     ports:
-      - "3307:3306"
+      - "5432:5432"
     env_file:
       - ../env/.env.db
     volumes:
